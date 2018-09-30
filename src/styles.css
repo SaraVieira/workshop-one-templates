@@ -98,8 +98,16 @@ button:hover {
   flex-wrap: wrap;
 }
 
+.heart-icon svg {
+  fill: none;
+  stroke: #f44336;
+  stroke-width: 1px;
+  stroke-linejoin: round;
+}
+
 .heart-icon:disabled svg {
-  fill: grey;
+  fill: #f44336;
+  opacity: 0.25;
 }
 
 .favorite-dogs li {
