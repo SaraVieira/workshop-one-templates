@@ -1,15 +1,15 @@
 import React from 'react'
 import { GoHeart, GoArrowRight } from 'react-icons/go'
 
-const Actions = ({ getDog, disabled, favoriteDog }) => (
-  <ul className="dog-actions">
+const Actions = ({ getCat, disabled, favoriteCat }) => (
+  <ul className="cat-actions">
     <li>
-      <button className="heart-icon" disabled={disabled} onClick={favoriteDog}>
+      <button className="heart-icon" disabled={disabled} onClick={favoriteCat}>
         <GoHeart size="30" color="#f44336" />
       </button>
     </li>
     <li>
-      <button onClick={getDog}>
+      <button onClick={getCat}>
         <GoArrowRight size="30" />
       </button>
     </li>

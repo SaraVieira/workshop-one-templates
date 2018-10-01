@@ -2,65 +2,66 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import Actions from './components/actions'
 import Header from './components/header'
-import FavoriteDogs from './components/favoriteDogs'
+import FavoriteCats from './components/favoriteCats'
 
 import './styles.css'
 
 class App extends Component {
   state = {
-    currentDog: null,
-    favoriteDogs: []
+    currentCat: null,
+    favoriteCats: []
   }
 
-  getDog = () => {
-    const url = 'https://dog.ceo/api/breed/akita/images/random'
-    this.setState({ currentDog: null })
+  getCat = () => {
+    const url = 'https://catis.life/cat'
+    this.setState({ currentCat: null })
 
     fetch(url)
       .then(rsp => rsp.json())
-      .then(data => this.setState({ currentDog: data.message }))
+      .then(data => this.setState({ currentCat: data.cat }))
   }
 
-  favoriteDog = dog => {
+  favoriteCat = cat => {
     this.setState(state => ({
-      favoriteDogs: this.state.favoriteDogs.concat(dog)
+      favoriteCats: this.state.favoriteCats.concat(cat)
     }))
   }
 
-  removeFavorite = currentDogIndex => {
+  removeFavorite = currentCatIndex => {
     this.setState(state => ({
-      favoriteDogs: state.favoriteDogs.filter((_, i) => i !== currentDogIndex)
+      favoriteCats: state.favoriteCats.filter((_, i) => i !== currentCatIndex)
     }))
   }
 
-  dogInFavorites = dog => this.state.favoriteDogs.includes(dog)
+  catInFavorites = cat => this.state.favoriteCats.includes(cat)
 
-  componentDidMount = () => this.getDog()
+  componentDidMount = () => this.getCat()
 
   render() {
-    const { currentDog, favoriteDogs } = this.state
+    const { currentCat, favoriteCats } = this.state
     return (
       <main>
-        <section className="dog-wrapper">
+        <section className="cat-wrapper">
           <Header />
-          <section className="dog-container">
+          <section className="cat-container">
             <figure>
-              {currentDog ? (
+              {currentCat ? (
                 <img
-                  className="dog-image"
-                  src={currentDog}
-                  alt="A great akita dog"
+                  key={currentCat}
+                  className="cat-image"
+                  src={currentCat}
+                  alt="A great cat"
                 />
               ) : null}
             </figure>
             <Actions
-              getDog={this.getDog}
-              disabled={this.dogInFavorites(currentDog)}
-              favoriteDog={() => this.favoriteDog(currentDog)}
+              getCat={this.getCat}
+              disabled={this.catInFavorites(currentCat)}
+              favoriteCat={() => this.favoriteCat(currentCat)}
             />
           </section>
-          <FavoriteDogs
-            dogs={favoriteDogs}
+          <FavoriteCats
+            cats={favoriteCats}
             removeFavorite={this.removeFavorite}
           />
         </section>
