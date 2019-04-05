@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import Actions from './components/actions'
 import Header from './components/header'
@@ -6,68 +6,58 @@ import FavoriteCats from './components/favoriteCats'
 
 import './styles.css'
 
-class App extends Component {
-  state = {
-    currentCat: null,
-    favoriteCats: []
-  }
+const App = () => {
+  const [currentCat, setCurrentCat] = useState(null)
+  const [favoriteCats, setFavoriteCats] = useState([])
 
-  getCat = () => {
+  const getCat = () => {
     const url = 'https://catis.life/cat'
-    this.setState({ currentCat: null })
+    setCurrentCat(null)
 
     fetch(url)
       .then(rsp => rsp.json())
-      .then(data => this.setState({ currentCat: data.cat }))
+      .then(data => setCurrentCat(data.cat))
   }
 
-  favoriteCat = cat => {
-    this.setState(state => ({
-      favoriteCats: this.state.favoriteCats.concat(cat)
-    }))
+  const favoriteCat = cat => {
+    setFavoriteCats(favoriteCats.concat(cat))
   }
 
-  removeFavorite = currentCatIndex => {
-    this.setState(state => ({
-      favoriteCats: state.favoriteCats.filter((_, i) => i !== currentCatIndex)
-    }))
+  const removeFavorite = currentCatIndex => {
+    setFavoriteCats(favoriteCats.filter((_, i) => i !== currentCatIndex))
   }
 
-  catInFavorites = cat => this.state.favoriteCats.includes(cat)
+  const catInFavorites = cat => favoriteCats.includes(cat)
 
-  componentDidMount = () => this.getCat()
+  useEffect(() => {
+    getCat()
+  }, [])
 
-  render() {
-    const { currentCat, favoriteCats } = this.state
-    return (
-      <main>
-        <section className="cat-wrapper">
-          <Header />
-          <section className="cat-container">
-            <figure>
-              {currentCat ? (
-                <img
-                  key={currentCat}
-                  className="cat-image"
-                  src={currentCat}
-                  alt="A great cat"
-                />
-              ) : null}
-            </figure>
-            <Actions
-              getCat={this.getCat}
-              disabled={this.catInFavorites(currentCat)}
-              favoriteCat={() => this.favoriteCat(currentCat)}
-            />
-          </section>
-          <FavoriteCats
-            cats={favoriteCats}
-            removeFavorite={this.removeFavorite}
+  return (
+    <main>
+      <section className="cat-wrapper">
+        <Header />
+        <section className="cat-container">
+          <figure>
+            {currentCat ? (
+              <img
+                key={currentCat}
+                className="cat-image"
+                src={currentCat}
+                alt="A great cat"
+              />
+            ) : null}
+          </figure>
+          <Actions
+            getCat={getCat}
+            disabled={catInFavorites(currentCat)}
+            favoriteCat={() => favoriteCat(currentCat)}
           />
         </section>
-      </main>
-    )
-  }
+        <FavoriteCats cats={favoriteCats} removeFavorite={removeFavorite} />
+      </section>
+    </main>
+  )
 }
 
 const rootElement = document.getElementById('root')
